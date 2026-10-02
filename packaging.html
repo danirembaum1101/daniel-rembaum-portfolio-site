@@ -1,0 +1,1090 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Packaging Design &mdash; Daniel Rembaum</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* ============ TOKENS ============ */
+  :root{
+    --ink:#121012;
+    --ink-2:#1a181a;
+    --ink-3:#232025;
+    --paper:#eeeae2;
+    --paper-2:#e3ddd0;
+    --paper-line:#d3ccbc;
+    --white:#f7f5f1;
+    --grey-dim:#a9a49c;
+    --grey-dim-2:#78736c;
+    --charcoal:#1c1a17;
+    --charcoal-dim:#6b665f;
+    --brass:#c99a53;
+    --brass-deep:#a87d3d;
+    --brass-pale:#e4c896;
+    --shadow-ink: 0 30px 60px -25px rgba(0,0,0,.6);
+    --shadow-paper: 0 20px 45px -20px rgba(30,26,18,.35);
+    --font-display:'Poppins',sans-serif;
+    --font-body:'Manrope',sans-serif;
+    --wrap: 1180px;
+  }
+
+  *,*::before,*::after{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *,*::before,*::after{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.001ms !important;scroll-behavior:auto !important;}
+  }
+
+  body{
+    margin:0;
+    background:var(--ink);
+    color:var(--white);
+    font-family:var(--font-body);
+    font-weight:400;
+    -webkit-font-smoothing:antialiased;
+    padding-inline:0;
+    overflow-x:hidden;
+  }
+
+  img{max-width:100%;display:block;}
+  a{color:inherit;}
+
+  ::selection{background:var(--brass);color:#1c1a17;}
+
+  h1,h2,h3{font-family:var(--font-display);margin:0;text-wrap:balance;}
+
+  .eyebrow{
+    font-family:var(--font-display);
+    font-style:italic;
+    font-weight:400;
+    letter-spacing:.01em;
+  }
+
+  .label{
+    font-family:var(--font-body);
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:.16em;
+    font-size:.72rem;
+  }
+
+  .wrap{
+    max-width:var(--wrap);
+    margin-inline:auto;
+    padding-inline:clamp(20px,5vw,48px);
+  }
+
+  /* ============ BACKGROUND VIDEO ============ */
+  .bg-video-wrap{
+    position:fixed;inset:0;
+    width:100vw;height:100vh;
+    z-index:0;
+    background:var(--ink);
+    overflow:hidden;
+  }
+  .bg-video-wrap video{
+    position:absolute;inset:0;
+    width:100%;height:100%;
+    object-fit:cover;
+    object-position:center;
+  }
+  .bg-scrim{
+    position:absolute;inset:0;
+    background:
+      linear-gradient(180deg, rgba(10,9,10,.62) 0%, rgba(10,9,10,.5) 45%, rgba(9,8,9,.75) 100%),
+      radial-gradient(120% 90% at 50% 0%, rgba(0,0,0,0) 0%, rgba(0,0,0,.4) 100%);
+  }
+  header.site-nav, main{position:relative;z-index:1;}
+
+  /* ============ NAV ============ */
+  header.site-nav{
+    position:fixed;top:0;left:0;right:0;z-index:900;
+    background:rgba(18,16,18,.72);
+    backdrop-filter:blur(14px) saturate(140%);
+    -webkit-backdrop-filter:blur(14px) saturate(140%);
+    border-bottom:1px solid rgba(255,255,255,.07);
+  }
+  .nav-inner{
+    display:grid;
+    grid-template-columns:auto minmax(0,1fr) auto;
+    align-items:center;
+    column-gap:20px;
+    padding-block:14px;
+  }
+  .nav-mark{
+    display:flex;align-items:center;gap:10px;
+    font-family:var(--font-display);
+    font-style:italic;
+    font-weight:300;
+    font-size:1.14rem;
+    letter-spacing:.01em;
+    color:var(--white);
+    text-decoration:none;
+    white-space:nowrap;
+  }
+  .glass-logo-fill{
+    position:absolute;inset:0;
+    clip-path:url(#logoClip);
+    -webkit-clip-path:url(#logoClip);
+    background-color:rgba(255,255,255,.10);
+    background-image:
+      radial-gradient(circle at center, rgba(255,255,255,.6) 0%, rgba(255,255,255,0) 35%),
+      radial-gradient(circle at center, rgba(0,0,0,.4) 0%, rgba(0,0,0,0) 42%);
+    background-repeat:no-repeat,no-repeat;
+    background-size:220% 220%,220% 220%;
+    background-position:50% 32%, 50% 68%;
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
+  }
+  .glass-logo-outline{position:absolute;inset:0;width:100%;height:100%;display:block;}
+  .glass-logo-outline path{fill:none;stroke-width:4;}
+  .sheen-nav path{stroke:url(#sheenNav);}
+  .sheen-contact path{stroke:url(#sheenContact);}
+  .nav-logo{
+    position:relative;display:inline-block;
+    width:18px;aspect-ratio:724.85/859.66;height:auto;flex-shrink:0;
+  }
+  .nav-logo .glass-logo-fill{backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);}
+  .nav-logo .glass-logo-outline path{stroke-width:55;}
+
+  .nav-links{
+    display:flex;align-items:center;justify-content:center;gap:20px;
+    min-width:0;
+  }
+  .nav-links a{
+    font-family:var(--font-body);font-weight:600;font-size:.72rem;
+    letter-spacing:.035em;text-transform:uppercase;
+    color:var(--grey-dim);text-decoration:none;white-space:nowrap;
+    transition:color .25s ease;
+  }
+  .nav-links a:hover,
+  .nav-links a:focus-visible{color:var(--white);}
+  .nav-links a.is-current{color:var(--white);}
+
+  .nav-right{display:flex;align-items:center;gap:16px;}
+
+  .nav-cta{
+    font-family:var(--font-body);font-weight:700;font-size:.78rem;
+    letter-spacing:.05em;text-transform:uppercase;
+    color:#000;background:#fff;
+    padding:.6em 1.2em;border-radius:2px;text-decoration:none;
+    white-space:nowrap;
+    transition:background .25s ease, transform .25s ease;
+  }
+  .nav-cta:hover{background:#e6e6e6;transform:translateY(-1px);}
+
+  .nav-toggle{
+    display:none;
+    align-items:center;justify-content:center;
+    width:40px;height:40px;
+    flex-shrink:0;
+    background:transparent;
+    border:1px solid rgba(255,255,255,.22);
+    border-radius:4px;
+    color:var(--white);
+    cursor:pointer;
+    padding:0;
+  }
+  .nav-toggle svg{width:20px;height:20px;display:block;}
+  .nav-toggle .icon-close{display:none;}
+  .nav-toggle[aria-expanded="true"] .icon-menu{display:none;}
+  .nav-toggle[aria-expanded="true"] .icon-close{display:block;}
+
+  .nav-mobile-panel{
+    display:none;
+    position:absolute;
+    top:100%;left:0;right:0;
+    background:rgba(18,16,18,.96);
+    backdrop-filter:blur(14px) saturate(140%);
+    -webkit-backdrop-filter:blur(14px) saturate(140%);
+    border-bottom:1px solid rgba(255,255,255,.07);
+    padding:18px clamp(20px,5vw,48px) 22px;
+  }
+  .nav-mobile-panel.is-open{display:block;}
+  .nav-mobile-links{
+    display:flex;flex-direction:column;gap:2px;
+    margin-bottom:18px;
+  }
+  .nav-mobile-links a{
+    display:block;
+    padding:10px 2px;
+    font-family:var(--font-body);font-weight:600;font-size:.92rem;
+    letter-spacing:.03em;text-transform:uppercase;
+    color:var(--grey-dim);text-decoration:none;
+    border-bottom:1px solid rgba(255,255,255,.07);
+    transition:color .2s ease;
+  }
+  .nav-mobile-links a:hover,
+  .nav-mobile-links a:focus-visible{color:var(--white);}
+  .nav-mobile-links a.is-current{color:var(--white);}
+  .nav-mobile-panel .nav-cta{
+    display:flex;
+    width:100%;
+    justify-content:center;
+  }
+
+  @media (max-width:1320px){
+    .nav-links{display:none;}
+    .nav-cta{display:none;}
+    .nav-toggle{display:flex;}
+  }
+
+  /* ============ HERO ============ */
+  .hero{
+    position:relative;
+    padding-top:150px;
+    padding-bottom:48px;
+  }
+  .hero .wrap{position:relative;z-index:2;}
+  .hero-eyebrow{
+    font-size:clamp(1.2rem,2.4vw,1.7rem);
+    color:var(--grey-dim);
+    margin-bottom:6px;
+  }
+  .hero h1{
+    font-size:clamp(3.4rem,10vw,8.2rem);
+    font-weight:700;
+    line-height:.92;
+    letter-spacing:-.02em;
+    text-transform:uppercase;
+    color:var(--white);
+  }
+
+  /* ============ GALLERY (packaging) ============ */
+  .gallery{
+    position:relative;
+    z-index:2;
+    padding-block:48px 24px;
+  }
+  .gallery-eyebrow{
+    font-size:clamp(1.1rem,2.4vw,1.5rem);
+    color:var(--grey-dim);
+    margin:0 0 40px;
+    text-align:center;
+  }
+  .gallery-sections{
+    display:flex;
+    flex-direction:column;
+    gap:64px;
+  }
+  .gallery-split{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:22px;
+    align-items:start;
+  }
+  .gallery-item{
+    position:relative;
+    display:block;
+    border-radius:10px;
+    overflow:hidden;
+    border:1px solid rgba(255,255,255,.08);
+    background:rgba(255,255,255,.03);
+    cursor:zoom-in;
+  }
+  .gallery-item img{
+    width:100%;height:auto;
+    display:block;
+    transition:transform .4s cubic-bezier(.2,.7,.2,1);
+  }
+  .gallery-item:hover img,
+  .gallery-item:focus-visible img{
+    transform:scale(1.06);
+  }
+  .gallery-item:focus-visible{outline:2px solid var(--brass);outline-offset:3px;}
+
+  /* Right-hand detail grid: scaled by JS to match the thumbnail's
+     rendered height, then arranged 2-up either stacked (vertical
+     thumbnails) or side-by-side (horizontal/square thumbnails), or as
+     a 2x2 grid for the one product with 4 detail renders. */
+  .gallery-mini-grid{
+    display:grid;
+    gap:14px;
+    height:100%;
+    min-height:0;
+  }
+  .gallery-mini-grid.mini-vertical{
+    grid-template-columns:1fr;
+    grid-template-rows:1fr 1fr;
+  }
+  .gallery-mini-grid.mini-horizontal{
+    grid-template-columns:1fr 1fr;
+    grid-template-rows:1fr;
+  }
+  .gallery-mini-grid.mini-quad{
+    grid-template-columns:1fr 1fr;
+    grid-template-rows:1fr 1fr;
+  }
+  .gallery-mini-grid .gallery-item{
+    height:100%;
+    min-height:0;
+  }
+  .gallery-mini-grid .gallery-item img{
+    width:100%;height:100%;
+    object-fit:cover;
+  }
+
+  @media (max-width:900px){
+    .gallery-split{grid-template-columns:1fr;}
+    .gallery-mini-grid{height:auto !important;}
+    .gallery-mini-grid.mini-vertical,
+    .gallery-mini-grid.mini-horizontal,
+    .gallery-mini-grid.mini-quad{
+      grid-template-columns:1fr 1fr;
+      grid-template-rows:none;
+    }
+    .gallery-mini-grid .gallery-item{
+      height:auto;
+      aspect-ratio:1/1;
+    }
+  }
+  @media (max-width:520px){
+    .gallery-mini-grid.mini-vertical,
+    .gallery-mini-grid.mini-horizontal,
+    .gallery-mini-grid.mini-quad{
+      grid-template-columns:1fr;
+    }
+  }
+
+  /* ============ LIGHTBOX ============ */
+  .lightbox{
+    position:fixed;inset:0;z-index:2000;
+    display:flex;align-items:center;justify-content:center;
+    padding:32px;
+    background:rgba(8,7,8,.92);
+    backdrop-filter:blur(6px);
+    -webkit-backdrop-filter:blur(6px);
+    opacity:0;
+    visibility:hidden;
+    transition:opacity .25s ease;
+  }
+  .lightbox.is-open{opacity:1;visibility:visible;}
+  .lightbox-figure{
+    position:relative;
+    max-width:min(92vw,1200px);
+    max-height:88vh;
+    display:flex;flex-direction:column;align-items:center;gap:14px;
+  }
+  .lightbox-img{
+    max-width:100%;
+    max-height:78vh;
+    width:auto;height:auto;
+    border-radius:8px;
+    box-shadow:var(--shadow-ink);
+    display:block;
+  }
+  .lightbox-caption{
+    font-family:var(--font-display);font-style:italic;font-weight:400;
+    color:var(--grey-dim);
+    font-size:.98rem;
+    text-align:center;
+  }
+  .lightbox-close,
+  .lightbox-prev,
+  .lightbox-next{
+    position:fixed;
+    background:rgba(255,255,255,.08);
+    border:1px solid rgba(255,255,255,.18);
+    color:var(--white);
+    border-radius:50%;
+    width:44px;height:44px;
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;
+    transition:background .2s ease, transform .2s ease;
+    padding:0;
+  }
+  .lightbox-close:hover{background:rgba(255,255,255,.18);}
+  .lightbox-prev:hover,
+  .lightbox-next:hover{background:rgba(255,255,255,.18);transform:translateY(-50%) scale(1.08);}
+  .lightbox-close{top:24px;right:24px;}
+  .lightbox-prev{left:24px;top:50%;transform:translateY(-50%);}
+  .lightbox-next{right:24px;top:50%;transform:translateY(-50%);}
+  .lightbox-close svg,.lightbox-prev svg,.lightbox-next svg{width:20px;height:20px;}
+
+  @media (max-width:640px){
+    .lightbox-prev,.lightbox-next{width:38px;height:38px;}
+    .lightbox-close{top:16px;right:16px;}
+    .lightbox-prev{left:10px;}
+    .lightbox-next{right:10px;}
+  }
+
+  .scroll-cue{
+    padding-block:24px;
+    text-align:center;
+    position:relative;
+    z-index:2;
+  }
+  .hero-scroll{
+    display:inline-flex;align-items:center;gap:.7em;
+    text-decoration:none;color:var(--grey-dim);
+    font-family:var(--font-body);font-weight:600;
+    font-size:.76rem;letter-spacing:.14em;text-transform:uppercase;
+    transition:color .25s ease;
+  }
+  .hero-scroll:hover{color:var(--white);}
+  .hero-scroll svg{width:16px;height:16px;animation:bob 2.2s ease-in-out infinite;}
+  @keyframes bob{0%,100%{transform:translateY(0);}50%{transform:translateY(5px);}}
+
+  /* ============ CONTACT / FOOTER ============ */
+  .contact{
+    padding-top:24px;
+    padding-bottom:70px;
+    position:relative;
+    overflow:hidden;
+  }
+  .contact-wave{
+    position:absolute;left:-4%;bottom:-3%;
+    width:min(34vw,420px);height:auto;
+    aspect-ratio:724.85/859.66;
+    transform:scaleX(-1);
+    z-index:0;
+  }
+  .contact .wrap{position:relative;z-index:1;}
+  .contact-eyebrow{font-size:clamp(1.1rem,2.4vw,1.5rem);color:var(--grey-dim);margin-bottom:10px;}
+  .contact h2{
+    font-size:clamp(2.6rem,8vw,5.6rem);
+    font-weight:900;text-transform:uppercase;letter-spacing:-.02em;
+    color:var(--white);
+  }
+  .contact-grid{
+    margin-top:56px;
+    display:flex;flex-wrap:wrap;gap:48px 80px;
+    align-items:flex-end;
+  }
+  .contact-email .eyebrow{color:var(--grey-dim);font-size:1.1rem;display:block;margin-bottom:10px;}
+  .contact-email a{
+    font-family:var(--font-display);font-weight:800;
+    font-size:clamp(1.5rem,4vw,2.6rem);
+    color:var(--white);text-decoration:none;
+    border-bottom:2px solid var(--brass);
+    transition:color .25s ease, border-color .25s ease;
+  }
+  .contact-email a:hover{color:var(--brass-pale);border-color:var(--brass-pale);}
+
+  .contact-foot{
+    margin-top:80px;padding-top:26px;
+    border-top:1px solid rgba(255,255,255,.08);
+    display:flex;flex-wrap:wrap;gap:14px 24px;
+    justify-content:space-between;align-items:center;
+    font-size:.78rem;color:var(--grey-dim-2);
+  }
+  .contact-foot .thanks{
+    font-family:var(--font-display);font-weight:700;color:var(--white);
+    text-transform:uppercase;letter-spacing:.02em;font-size:.92rem;
+  }
+
+  section[id]{scroll-margin-top:76px;}
+  .gallery-split[id]{scroll-margin-top:76px;}
+
+  /* ============ RESPONSIVE ============ */
+  @media (max-width:480px){
+    .hero{padding-top:120px;}
+    .hero h1{font-size:3rem;}
+    .contact-email a{font-size:1.1rem;overflow-wrap:anywhere;}
+  }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <clipPath id="logoClip" clipPathUnits="objectBoundingBox">
+      <path d="M0.972615,0.975281c-0.073532-0.030035-0.197889-0.072354-0.328661-0.119605,0.254618-0.104239,0.396965-0.258195,0.345658-0.44713C0.918066,0.145174,0.476706,0.006817,0.217107,0.000151c-0.004222-0.000105-0.011658-0.000326-0.018376,0.000081-0.006319-0.00043-0.015783,0.00043-0.019921,0.008631-0.003532,0.006991,0.004097,0.017332,0.021342,0.021997,0.001504,0.000407,0.003145,0.000872,0.004898,0.001384,0.002069,0.000838,0.004166,0.001489,0.006291,0.001908,0.060495,0.018903,0.221204,0.084754,0.279699,0.189191C0.631455,0.474118,0.06371,0.371426,0.010154,0.546076c-0.040698,0.132704,0.208691,0.235279,0.47116,0.314671-0.157136,0.062083-0.333324,0.100493-0.470911,0.112847-0.01461,0.001314-0.013451,0.020915,0.001173,0.019659,0.207974-0.017856,0.397296-0.054766,0.553342-0.108019,0.159302,0.045309,0.312589,0.082335,0.397696,0.112614,0.023605,0.008399,0.041678-0.00962,0.010002-0.022567ZM0.138125,0.570598c0.028558-0.047379,0.165579-0.047682,0.291522-0.070528,0.176823-0.032082,0.337366-0.139951,0.17743-0.297757-0.057846-0.057081-0.12673-0.099214-0.191005-0.129761,0.20774,0.056976,0.395613,0.169334,0.44554,0.344043,0.050107,0.175372-0.097731,0.313682-0.299372,0.40915-0.236932-0.088233-0.464841-0.187563-0.424115-0.255147Z"/>
+    </clipPath>
+    <radialGradient id="sheenNav" gradientUnits="userSpaceOnUse" cx="362.4" cy="275.1" r="560">
+      <stop offset="0%" stop-color="#fff" stop-opacity=".95"/>
+      <stop offset="45%" stop-color="#fff" stop-opacity=".4"/>
+      <stop offset="100%" stop-color="#fff" stop-opacity=".14"/>
+    </radialGradient>
+    <radialGradient id="sheenHero" gradientUnits="userSpaceOnUse" cx="362.4" cy="275.1" r="560">
+      <stop offset="0%" stop-color="#fff" stop-opacity=".95"/>
+      <stop offset="45%" stop-color="#fff" stop-opacity=".4"/>
+      <stop offset="100%" stop-color="#fff" stop-opacity=".14"/>
+    </radialGradient>
+    <radialGradient id="sheenContact" gradientUnits="userSpaceOnUse" cx="362.4" cy="275.1" r="560">
+      <stop offset="0%" stop-color="#fff" stop-opacity=".95"/>
+      <stop offset="45%" stop-color="#fff" stop-opacity=".4"/>
+      <stop offset="100%" stop-color="#fff" stop-opacity=".14"/>
+    </radialGradient>
+  </defs>
+</svg>
+
+<div class="bg-video-wrap" aria-hidden="true">
+  <video id="bgVideo" muted playsinline preload="auto">
+    <source src="media/ink-mixing.webm" type="video/webm">
+    <source src="media/ink-mixing.mp4" type="video/mp4">
+  </video>
+  <div class="bg-scrim"></div>
+</div>
+
+<header class="site-nav">
+  <div class="wrap nav-inner">
+    <a href="index.html" class="nav-mark">
+      <span class="nav-logo" aria-hidden="true">
+        <span class="glass-logo-fill"></span>
+        <svg class="glass-logo-outline sheen-nav" viewBox="0 0 724.85 859.66"><path d="M705,838.41c-53.3-25.82-143.44-62.2-238.23-102.82,184.56-89.61,287.74-221.96,250.55-384.38C665.46,124.8,345.54,5.86,157.37.13c-3.06-.09-8.45-.28-13.32.07-4.58-.37-11.44.37-14.44,7.42-2.56,6.01,2.97,14.9,15.47,18.91,1.09.35,2.28.75,3.55,1.19,1.5.72,3.02,1.28,4.56,1.64,43.85,16.25,160.34,72.86,202.74,162.64C457.71,407.58,46.18,319.3,7.36,469.44c-29.5,114.08,151.27,202.26,341.52,270.51-113.9,53.37-241.61,86.39-341.34,97.01-10.59,1.13-9.75,17.98.85,16.9,150.75-15.35,287.98-47.08,401.09-92.86,115.47,38.95,226.58,70.78,288.27,96.81,17.11,7.22,30.21-8.27,7.25-19.4ZM100.12,490.52c20.7-40.73,120.02-40.99,211.31-60.63,128.17-27.58,244.54-120.31,128.61-255.97-41.93-49.07-91.86-85.29-138.45-111.55,150.58,48.98,286.76,145.57,322.95,295.76,36.32,150.76-70.84,269.66-217,351.73-171.74-75.85-336.94-161.24-307.42-219.34Z"/></svg>
+      </span>
+      Daniel Rembaum
+    </a>
+    <nav class="nav-links" aria-label="Site pages">
+      <a href="index.html">Home</a>
+      <a href="packaging.html" class="is-current" aria-current="page">Packaging</a>
+      <a href="graphic-design.html">Graphic Design</a>
+      <a href="ai-workflow.html">AI Workflow</a>
+      <a href="3d-modeling.html">3D Modeling</a>
+      <a href="projects.html">Projects</a>
+    </nav>
+    <div class="nav-right">
+      <a class="nav-cta" href="#contact">Get in touch</a>
+      <button type="button" class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="navMobilePanel" aria-label="Open menu">
+        <svg class="icon-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+        <svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+  </div>
+  <div class="nav-mobile-panel" id="navMobilePanel">
+    <nav class="nav-mobile-links" aria-label="Site pages">
+      <a href="index.html">Home</a>
+      <a href="packaging.html" class="is-current" aria-current="page">Packaging</a>
+      <a href="graphic-design.html">Graphic Design</a>
+      <a href="ai-workflow.html">AI Workflow</a>
+      <a href="3d-modeling.html">3D Modeling</a>
+      <a href="projects.html">Projects</a>
+    </nav>
+    <a class="nav-cta" href="#contact">Get in touch</a>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ============ HERO ============ -->
+  <section class="hero">
+    <div class="wrap">
+      <p class="hero-eyebrow eyebrow">Design Discipline</p>
+      <h1>Packaging Design</h1>
+    </div>
+  </section>
+
+  <!-- ============ GALLERY ============ -->
+  <section id="gallery" class="gallery">
+    <div class="wrap">
+      <p class="gallery-eyebrow eyebrow">Selected Packaging:</p>
+      <div class="gallery-sections">
+      <div class="gallery-split" id="okko-earbuds-white">
+        <a class="gallery-item" href="images/packaging/full/okko-earbuds-white-main.png" data-title="OKKO — Wireless Open Ear Earbuds (White) &mdash; Package Design">
+          <img src="images/packaging/thumb/okko-earbuds-white-main.png" alt="OKKO — Wireless Open Ear Earbuds (White) packaging design" loading="lazy">
+        </a>
+        <div class="gallery-mini-grid mini-horizontal">
+          <a class="gallery-item" href="images/packaging/full/okko-earbuds-white-01.png" data-title="OKKO — Wireless Open Ear Earbuds (White) &mdash; Front Panel">
+            <img src="images/packaging/full/okko-earbuds-white-01.png" alt="OKKO — Wireless Open Ear Earbuds (White) front panel render" loading="lazy">
+          </a>
+          <a class="gallery-item" href="images/packaging/full/okko-earbuds-white-02.png" data-title="OKKO — Wireless Open Ear Earbuds (White) &mdash; Angled View">
+            <img src="images/packaging/full/okko-earbuds-white-02.png" alt="OKKO — Wireless Open Ear Earbuds (White) angled view render" loading="lazy">
+          </a>
+        </div>
+      </div>
+
+      <div class="gallery-split" id="okko-earbuds-black">
+        <a class="gallery-item" href="images/packaging/full/okko-earbuds-black-main.png" data-title="OKKO — Wireless Open Ear Earbuds (Black) &mdash; Package Design">
+          <img src="images/packaging/thumb/okko-earbuds-black-main.png" alt="OKKO — Wireless Open Ear Earbuds (Black) packaging design" loading="lazy">
+        </a>
+        <div class="gallery-mini-grid mini-horizontal">
+          <a class="gallery-item" href="images/packaging/full/okko-earbuds-black-01.png" data-title="OKKO — Wireless Open Ear Earbuds (Black) &mdash; Front Panel">
+            <img src="images/packaging/full/okko-earbuds-black-01.png" alt="OKKO — Wireless Open Ear Earbuds (Black) front panel render" loading="lazy">
+          </a>
+          <a class="gallery-item" href="images/packaging/full/okko-earbuds-black-02.png" data-title="OKKO — Wireless Open Ear Earbuds (Black) &mdash; Angled View">
+            <img src="images/packaging/full/okko-earbuds-black-02.png" alt="OKKO — Wireless Open Ear Earbuds (Black) angled view render" loading="lazy">
+          </a>
+        </div>
+      </div>
+
+      <div class="gallery-split" id="evo-cordless-vacuum">
+        <a class="gallery-item" href="images/packaging/full/evo-cordless-vacuum-main.png" data-title="EVO — Cordless Vacuum, Powerful Hand Vac &mdash; Package Design">
+          <img src="images/packaging/thumb/evo-cordless-vacuum-main.png" alt="EVO — Cordless Vacuum, Powerful Hand Vac packaging design" loading="lazy">
+        </a>
+        <div class="gallery-mini-grid mini-vertical">
+          <a class="gallery-item" href="images/packaging/full/evo-cordless-vacuum-01.png" data-title="EVO — Cordless Vacuum, Powerful Hand Vac &mdash; Front Panel">
+            <img src="images/packaging/full/evo-cordless-vacuum-01.png" alt="EVO — Cordless Vacuum, Powerful Hand Vac front panel render" loading="lazy">
+          </a>
+          <a class="gallery-item" href="images/packaging/full/evo-cordless-vacuum-02.png" data-title="EVO — Cordless Vacuum, Powerful Hand Vac &mdash; Angled View">
+            <img src="images/packaging/full/evo-cordless-vacuum-02.png" alt="EVO — Cordless Vacuum, Powerful Hand Vac angled view render" loading="lazy">
+          </a>
+        </div>
+      </div>
+
+      <div class="gallery-split" id="atmospheres-gravity-lamp">
+        <a class="gallery-item" href="images/packaging/full/atmospheres-gravity-lamp-main.png" data-title="Atmospheres — Gravity LED Lamp with Wireless Charging &mdash; Package Design">
+          <img src="images/packaging/thumb/atmospheres-gravity-lamp-main.png" alt="Atmospheres — Gravity LED Lamp with Wireless Charging packaging design" loading="lazy">
+        </a>
+        <div class="gallery-mini-grid mini-vertical">
+          <a class="gallery-item" href="images/packaging/full/atmospheres-gravity-lamp-01.png" data-title="Atmospheres — Gravity LED Lamp with Wireless Charging &mdash; Front Panel">
+            <img src="images/packaging/full/atmospheres-gravity-lamp-01.png" alt="Atmospheres — Gravity LED Lamp with Wireless Charging front panel render" loading="lazy">
+          </a>
+          <a class="gallery-item" href="images/packaging/full/atmospheres-gravity-lamp-02.png" data-title="Atmospheres — Gravity LED Lamp with Wireless Charging &mdash; Angled View">
+            <img src="images/packaging/full/atmospheres-gravity-lamp-02.png" alt="Atmospheres — Gravity LED Lamp with Wireless Charging angled view render" loading="lazy">
+          </a>
+        </div>
+      </div>
+
+      <div class="gallery-split" id="flex-weighted-vest">
+        <a class="gallery-item" href="images/packaging/full/flex-weighted-vest-main.png" data-title="FLEX Fitness — Weighted Vest &mdash; Package Design">
+          <img src="images/packaging/thumb/flex-weighted-vest-main.png" alt="FLEX Fitness — Weighted Vest packaging design" loading="lazy">
+        </a>
+        <div class="gallery-mini-grid mini-horizontal">
+          <a class="gallery-item" href="images/packaging/full/flex-weighted-vest-01.png" data-title="FLEX Fitness — Weighted Vest &mdash; Front Panel">
+            <img src="images/packaging/full/flex-weighted-vest-01.png" alt="FLEX Fitness — Weighted Vest front panel render" loading="lazy">
+          </a>
+          <a class="gallery-item" href="images/packaging/full/flex-weighted-vest-02.png" data-title="FLEX Fitness — Weighted Vest &mdash; Angled View">
+            <img src="images/packaging/full/flex-weighted-vest-02.png" alt="FLEX Fitness — Weighted Vest angled view render" loading="lazy">
+          </a>
+        </div>
+      </div>
+
+      <div class="gallery-split" id="soundplay-smart-glasses">
+        <a class="gallery-item" href="images/packaging/full/soundplay-smart-glasses-main.png" data-title="SoundPlay — Smart Glasses, Sunglasses with Open-Ear Audio &mdash; Package Design">
+          <img src="images/packaging/thumb/soundplay-smart-glasses-main.png" alt="SoundPlay — Smart Glasses, Sunglasses with Open-Ear Audio packaging design" loading="lazy">
+        </a>
+        <div class="gallery-mini-grid mini-horizontal">
+          <a class="gallery-item" href="images/packaging/full/soundplay-smart-glasses-01.png" data-title="SoundPlay — Smart Glasses, Sunglasses with Open-Ear Audio &mdash; Front Panel">
+            <img src="images/packaging/full/soundplay-smart-glasses-01.png" alt="SoundPlay — Smart Glasses, Sunglasses with Open-Ear Audio front panel render" loading="lazy">
+          </a>
+          <a class="gallery-item" href="images/packaging/full/soundplay-smart-glasses-02.png" data-title="SoundPlay — Smart Glasses, Sunglasses with Open-Ear Audio &mdash; Angled View">
+            <img src="images/packaging/full/soundplay-smart-glasses-02.png" alt="SoundPlay — Smart Glasses, Sunglasses with Open-Ear Audio angled view render" loading="lazy">
+          </a>
+        </div>
+      </div>
+
+      <div class="gallery-split" id="miniminds-walkie-talkies">
+        <a class="gallery-item" href="images/packaging/full/miniminds-walkie-talkies-main.png" data-title="Mini Minds — Video Walkie Talkies, 2-Pack &mdash; Package Design">
+          <img src="images/packaging/thumb/miniminds-walkie-talkies-main.png" alt="Mini Minds — Video Walkie Talkies, 2-Pack packaging design" loading="lazy">
+        </a>
+        <div class="gallery-mini-grid mini-horizontal">
+          <a class="gallery-item" href="images/packaging/full/miniminds-walkie-talkies-01.png" data-title="Mini Minds — Video Walkie Talkies, 2-Pack &mdash; Front Panel">
+            <img src="images/packaging/full/miniminds-walkie-talkies-01.png" alt="Mini Minds — Video Walkie Talkies, 2-Pack front panel render" loading="lazy">
+          </a>
+          <a class="gallery-item" href="images/packaging/full/miniminds-walkie-talkies-02.png" data-title="Mini Minds — Video Walkie Talkies, 2-Pack &mdash; Angled View">
+            <img src="images/packaging/full/miniminds-walkie-talkies-02.png" alt="Mini Minds — Video Walkie Talkies, 2-Pack angled view render" loading="lazy">
+          </a>
+        </div>
+      </div>
+
+      <div class="gallery-split" id="hammerstone-drill">
+        <a class="gallery-item" href="images/packaging/full/hammerstone-drill-main.png" data-title="Hammerstone — PWR Drill GT 1000 &mdash; Package Design">
+          <img src="images/packaging/thumb/hammerstone-drill-main.png" alt="Hammerstone — PWR Drill GT 1000 packaging design" loading="lazy">
+        </a>
+        <div class="gallery-mini-grid mini-horizontal">
+          <a class="gallery-item" href="images/packaging/full/hammerstone-drill-01.png" data-title="Hammerstone — PWR Drill GT 1000 &mdash; Front Panel">
+            <img src="images/packaging/full/hammerstone-drill-01.png" alt="Hammerstone — PWR Drill GT 1000 front panel render" loading="lazy">
+          </a>
+          <a class="gallery-item" href="images/packaging/full/hammerstone-drill-02.png" data-title="Hammerstone — PWR Drill GT 1000 &mdash; Angled View">
+            <img src="images/packaging/full/hammerstone-drill-02.png" alt="Hammerstone — PWR Drill GT 1000 angled view render" loading="lazy">
+          </a>
+        </div>
+      </div>
+
+      <div class="gallery-split" id="pocketjuice-travel-adaptor">
+        <a class="gallery-item" href="images/packaging/full/pocketjuice-travel-adaptor-main.png" data-title="PocketJuice — Slim Power Pro Extend Travel Adaptor, 5000mAh Power Bank &amp; Wall Charger &mdash; Package Design">
+          <img src="images/packaging/thumb/pocketjuice-travel-adaptor-main.png" alt="PocketJuice — Slim Power Pro Extend Travel Adaptor, 5000mAh Power Bank & Wall Charger packaging design" loading="lazy">
+        </a>
+        <div class="gallery-mini-grid mini-quad">
+          <a class="gallery-item" href="images/packaging/full/pocketjuice-travel-adaptor-01.png" data-title="PocketJuice — Slim Power Pro Extend Travel Adaptor, 5000mAh Power Bank &amp; Wall Charger &mdash; Front Panel">
+            <img src="images/packaging/full/pocketjuice-travel-adaptor-01.png" alt="PocketJuice — Slim Power Pro Extend Travel Adaptor, 5000mAh Power Bank & Wall Charger front panel render" loading="lazy">
+          </a>
+          <a class="gallery-item" href="images/packaging/full/pocketjuice-travel-adaptor-02.png" data-title="PocketJuice — Slim Power Pro Extend Travel Adaptor, 5000mAh Power Bank &amp; Wall Charger &mdash; Angled View">
+            <img src="images/packaging/full/pocketjuice-travel-adaptor-02.png" alt="PocketJuice — Slim Power Pro Extend Travel Adaptor, 5000mAh Power Bank & Wall Charger angled view render" loading="lazy">
+          </a>
+          <a class="gallery-item" href="images/packaging/full/pocketjuice-travel-adaptor-03.png" data-title="PocketJuice — Slim Power Pro Extend Travel Adaptor, 5000mAh Power Bank &amp; Wall Charger &mdash; Detail View">
+            <img src="images/packaging/full/pocketjuice-travel-adaptor-03.png" alt="PocketJuice — Slim Power Pro Extend Travel Adaptor, 5000mAh Power Bank & Wall Charger detail view render" loading="lazy">
+          </a>
+          <a class="gallery-item" href="images/packaging/full/pocketjuice-travel-adaptor-04.png" data-title="PocketJuice — Slim Power Pro Extend Travel Adaptor, 5000mAh Power Bank &amp; Wall Charger &mdash; Contents View">
+            <img src="images/packaging/full/pocketjuice-travel-adaptor-04.png" alt="PocketJuice — Slim Power Pro Extend Travel Adaptor, 5000mAh Power Bank & Wall Charger contents view render" loading="lazy">
+          </a>
+        </div>
+      </div>
+
+      <div class="gallery-split" id="airtek-dehumidifier">
+        <a class="gallery-item" href="images/packaging/full/airtek-dehumidifier-main.png" data-title="Airtek — Dehumidifier &mdash; Package Design">
+          <img src="images/packaging/thumb/airtek-dehumidifier-main.png" alt="Airtek — Dehumidifier packaging design" loading="lazy">
+        </a>
+        <div class="gallery-mini-grid mini-horizontal">
+          <a class="gallery-item" href="images/packaging/full/airtek-dehumidifier-01.png" data-title="Airtek — Dehumidifier &mdash; Front Panel">
+            <img src="images/packaging/full/airtek-dehumidifier-01.png" alt="Airtek — Dehumidifier front panel render" loading="lazy">
+          </a>
+          <a class="gallery-item" href="images/packaging/full/airtek-dehumidifier-02.png" data-title="Airtek — Dehumidifier &mdash; Angled View">
+            <img src="images/packaging/full/airtek-dehumidifier-02.png" alt="Airtek — Dehumidifier angled view render" loading="lazy">
+          </a>
+        </div>
+      </div>
+
+      <div class="gallery-split" id="smart-dash-cam">
+        <a class="gallery-item" href="images/packaging/full/smart-dash-cam-main.png" data-title="tzumi — Smart Dash Car Dashcam, 1080P Front + Cabin + Rear Cam Set &mdash; Package Design">
+          <img src="images/packaging/thumb/smart-dash-cam-main.png" alt="tzumi — Smart Dash Car Dashcam, 1080P Front + Cabin + Rear Cam Set packaging design" loading="lazy">
+        </a>
+        <div class="gallery-mini-grid mini-horizontal">
+          <a class="gallery-item" href="images/packaging/full/smart-dash-cam-01.png" data-title="tzumi — Smart Dash Car Dashcam, 1080P Front + Cabin + Rear Cam Set &mdash; Front Panel">
+            <img src="images/packaging/full/smart-dash-cam-01.png" alt="tzumi — Smart Dash Car Dashcam, 1080P Front + Cabin + Rear Cam Set front panel render" loading="lazy">
+          </a>
+          <a class="gallery-item" href="images/packaging/full/smart-dash-cam-02.png" data-title="tzumi — Smart Dash Car Dashcam, 1080P Front + Cabin + Rear Cam Set &mdash; Angled View">
+            <img src="images/packaging/full/smart-dash-cam-02.png" alt="tzumi — Smart Dash Car Dashcam, 1080P Front + Cabin + Rear Cam Set angled view render" loading="lazy">
+          </a>
+        </div>
+      </div>
+
+      <div class="gallery-split" id="atmospheres-table-lamp">
+        <a class="gallery-item" href="images/packaging/full/atmospheres-table-lamp-main.png" data-title="Atmospheres — Clear Table Lamp with Shade, Dimmable LED &mdash; Package Design">
+          <img src="images/packaging/thumb/atmospheres-table-lamp-main.png" alt="Atmospheres — Clear Table Lamp with Shade, Dimmable LED packaging design" loading="lazy">
+        </a>
+        <div class="gallery-mini-grid mini-vertical">
+          <a class="gallery-item" href="images/packaging/full/atmospheres-table-lamp-01.png" data-title="Atmospheres — Clear Table Lamp with Shade, Dimmable LED &mdash; Front Panel">
+            <img src="images/packaging/full/atmospheres-table-lamp-01.png" alt="Atmospheres — Clear Table Lamp with Shade, Dimmable LED front panel render" loading="lazy">
+          </a>
+          <a class="gallery-item" href="images/packaging/full/atmospheres-table-lamp-02.png" data-title="Atmospheres — Clear Table Lamp with Shade, Dimmable LED &mdash; Angled View">
+            <img src="images/packaging/full/atmospheres-table-lamp-02.png" alt="Atmospheres — Clear Table Lamp with Shade, Dimmable LED angled view render" loading="lazy">
+          </a>
+        </div>
+      </div>
+
+      <div class="gallery-split" id="atmospheres-infinity-cube">
+        <a class="gallery-item" href="images/packaging/full/atmospheres-infinity-cube-main.png" data-title="Atmospheres — Iridescent Infinity Cube, LED Desk Lamp &mdash; Package Design">
+          <img src="images/packaging/thumb/atmospheres-infinity-cube-main.png" alt="Atmospheres — Iridescent Infinity Cube, LED Desk Lamp packaging design" loading="lazy">
+        </a>
+        <div class="gallery-mini-grid mini-horizontal">
+          <a class="gallery-item" href="images/packaging/full/atmospheres-infinity-cube-01.png" data-title="Atmospheres — Iridescent Infinity Cube, LED Desk Lamp &mdash; Front Panel">
+            <img src="images/packaging/full/atmospheres-infinity-cube-01.png" alt="Atmospheres — Iridescent Infinity Cube, LED Desk Lamp front panel render" loading="lazy">
+          </a>
+          <a class="gallery-item" href="images/packaging/full/atmospheres-infinity-cube-02.png" data-title="Atmospheres — Iridescent Infinity Cube, LED Desk Lamp &mdash; Angled View">
+            <img src="images/packaging/full/atmospheres-infinity-cube-02.png" alt="Atmospheres — Iridescent Infinity Cube, LED Desk Lamp angled view render" loading="lazy">
+          </a>
+        </div>
+      </div>
+
+      <div class="gallery-split" id="evo-smart-glasses">
+        <a class="gallery-item" href="images/packaging/full/evo-smart-glasses-main.png" data-title="EVO — Smart Glasses, Polarized Sunglasses with Open-Ear Audio &amp; Camera &mdash; Package Design">
+          <img src="images/packaging/thumb/evo-smart-glasses-main.png" alt="EVO — Smart Glasses, Polarized Sunglasses with Open-Ear Audio & Camera packaging design" loading="lazy">
+        </a>
+        <div class="gallery-mini-grid mini-horizontal">
+          <a class="gallery-item" href="images/packaging/full/evo-smart-glasses-01.png" data-title="EVO — Smart Glasses, Polarized Sunglasses with Open-Ear Audio &amp; Camera &mdash; Front Panel">
+            <img src="images/packaging/full/evo-smart-glasses-01.png" alt="EVO — Smart Glasses, Polarized Sunglasses with Open-Ear Audio & Camera front panel render" loading="lazy">
+          </a>
+          <a class="gallery-item" href="images/packaging/full/evo-smart-glasses-02.png" data-title="EVO — Smart Glasses, Polarized Sunglasses with Open-Ear Audio &amp; Camera &mdash; Angled View">
+            <img src="images/packaging/full/evo-smart-glasses-02.png" alt="EVO — Smart Glasses, Polarized Sunglasses with Open-Ear Audio & Camera angled view render" loading="lazy">
+          </a>
+        </div>
+      </div>
+
+      <div class="gallery-split" id="eo-speaker-earbuds-display">
+        <a class="gallery-item" href="images/packaging/full/eo-speaker-earbuds-display-main.png" data-title="eo — 2-in-1 Bluetooth Speaker &amp; Earbuds, In-Store Display &mdash; Package Design">
+          <img src="images/packaging/thumb/eo-speaker-earbuds-display-main.png" alt="eo — 2-in-1 Bluetooth Speaker & Earbuds, In-Store Display packaging design" loading="lazy">
+        </a>
+        <div class="gallery-mini-grid mini-vertical">
+          <a class="gallery-item" href="images/packaging/full/eo-speaker-earbuds-display-01.png" data-title="eo — 2-in-1 Bluetooth Speaker &amp; Earbuds, In-Store Display &mdash; Display — Lavender Colorway">
+            <img src="images/packaging/full/eo-speaker-earbuds-display-01.png" alt="eo — 2-in-1 Bluetooth Speaker & Earbuds, In-Store Display display — lavender colorway render" loading="lazy">
+          </a>
+          <a class="gallery-item" href="images/packaging/full/eo-speaker-earbuds-display-02.png" data-title="eo — 2-in-1 Bluetooth Speaker &amp; Earbuds, In-Store Display &mdash; Display — Green Colorway">
+            <img src="images/packaging/full/eo-speaker-earbuds-display-02.png" alt="eo — 2-in-1 Bluetooth Speaker & Earbuds, In-Store Display display — green colorway render" loading="lazy">
+          </a>
+        </div>
+      </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="scroll-cue">
+    <a href="#contact" class="hero-scroll">
+      Get in touch
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 4v16M6 14l6 6 6-6"/></svg>
+    </a>
+  </div>
+
+  <!-- ============ CONTACT ============ -->
+  <section id="contact" class="contact">
+    <div class="contact-wave" aria-hidden="true">
+      <span class="glass-logo-fill"></span>
+      <svg class="glass-logo-outline sheen-contact" viewBox="0 0 724.85 859.66"><path d="M705,838.41c-53.3-25.82-143.44-62.2-238.23-102.82,184.56-89.61,287.74-221.96,250.55-384.38C665.46,124.8,345.54,5.86,157.37.13c-3.06-.09-8.45-.28-13.32.07-4.58-.37-11.44.37-14.44,7.42-2.56,6.01,2.97,14.9,15.47,18.91,1.09.35,2.28.75,3.55,1.19,1.5.72,3.02,1.28,4.56,1.64,43.85,16.25,160.34,72.86,202.74,162.64C457.71,407.58,46.18,319.3,7.36,469.44c-29.5,114.08,151.27,202.26,341.52,270.51-113.9,53.37-241.61,86.39-341.34,97.01-10.59,1.13-9.75,17.98.85,16.9,150.75-15.35,287.98-47.08,401.09-92.86,115.47,38.95,226.58,70.78,288.27,96.81,17.11,7.22,30.21-8.27,7.25-19.4ZM100.12,490.52c20.7-40.73,120.02-40.99,211.31-60.63,128.17-27.58,244.54-120.31,128.61-255.97-41.93-49.07-91.86-85.29-138.45-111.55,150.58,48.98,286.76,145.57,322.95,295.76,36.32,150.76-70.84,269.66-217,351.73-171.74-75.85-336.94-161.24-307.42-219.34Z"/></svg>
+    </div>
+    <div class="wrap">
+      <p class="contact-eyebrow eyebrow">For more information:</p>
+      <h2>Reach Out!</h2>
+      <div class="contact-grid">
+        <div class="contact-email">
+          <span class="eyebrow">Email</span>
+          <a href="mailto:dani.rembaum@danirembaum.com">dani.rembaum@danirembaum.com</a>
+        </div>
+      </div>
+      <div class="contact-foot">
+        <span class="thanks">Thank you!</span>
+        <span>&copy; 2026 Daniel Rembaum &mdash; Portfolio</span>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============ LIGHTBOX ============ -->
+<div class="lightbox" id="lightbox" hidden>
+  <button type="button" class="lightbox-close" id="lightboxClose" aria-label="Close">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg>
+  </button>
+  <button type="button" class="lightbox-prev" id="lightboxPrev" aria-label="Previous image">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+  </button>
+  <button type="button" class="lightbox-next" id="lightboxNext" aria-label="Next image">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+  </button>
+  <figure class="lightbox-figure">
+    <img class="lightbox-img" id="lightboxImg" src="" alt="">
+    <figcaption class="lightbox-caption" id="lightboxCaption"></figcaption>
+  </figure>
+</div>
+
+<script>
+(function(){
+  function scrollFraction(){
+    var h = document.scrollingElement || document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    return max > 0 ? Math.min(1, Math.max(0, h.scrollTop / max)) : 0;
+  }
+
+  // Scroll-scrubbed background video
+  var video = document.getElementById('bgVideo');
+  var videoReady = false;
+  var ticking = false;
+
+  function primeVideo(){
+    var p = video.play();
+    if(p && p.catch){
+      p.then(function(){ video.pause(); }).catch(function(){});
+    } else {
+      video.pause();
+    }
+  }
+
+  function scrubVideo(){
+    if(!videoReady || !video.duration || isNaN(video.duration)) return;
+    var target = scrollFraction() * video.duration;
+    // Avoid redundant seeks that can stutter on some browsers
+    if(Math.abs(video.currentTime - target) > 0.008){
+      video.currentTime = target;
+    }
+  }
+
+  function onFrame(){
+    scrubVideo();
+    ticking = false;
+  }
+
+  function requestScrub(){
+    if(!ticking){
+      ticking = true;
+      window.requestAnimationFrame(onFrame);
+    }
+  }
+
+  video.addEventListener('loadedmetadata', function(){
+    videoReady = true;
+    primeVideo();
+    scrubVideo();
+  });
+  // In case metadata is already cached/loaded before the listener attaches
+  if(video.readyState >= 1){
+    videoReady = true;
+    primeVideo();
+  }
+
+  function onScroll(){
+    requestScrub();
+  }
+  document.addEventListener('scroll', onScroll, {passive:true});
+  window.addEventListener('resize', requestScrub);
+  requestScrub();
+
+  // Cursor-driven glass sheen on the logo bevels only (the fill stays a
+  // static frosted panel). Cheap: a couple of SVG gradient attributes
+  // updated on a throttled rAF loop, no canvas/WebGL.
+  var sheenTargets = [
+    {el: document.querySelector('.nav-logo'), grad: document.getElementById('sheenNav')},
+    {el: document.querySelector('.contact-wave'), grad: document.getElementById('sheenContact')}
+  ].filter(function(t){ return t.el && t.grad; });
+  var LOGO_W = 724.85, LOGO_H = 859.66;
+
+  if(sheenTargets.length && window.matchMedia && !window.matchMedia('(pointer: coarse)').matches){
+    var pointerX = null, pointerY = null, sheenTicking = false;
+
+    function updateSheen(){
+      sheenTicking = false;
+      if(pointerX === null) return;
+      sheenTargets.forEach(function(t){
+        var r = t.el.getBoundingClientRect();
+        if(r.width === 0 || r.height === 0) return;
+        var x = Math.max(0, Math.min(100, ((pointerX - r.left) / r.width) * 100));
+        var y = Math.max(0, Math.min(100, ((pointerY - r.top) / r.height) * 100));
+        t.grad.setAttribute('cx', ((x / 100) * LOGO_W).toFixed(1));
+        t.grad.setAttribute('cy', ((y / 100) * LOGO_H).toFixed(1));
+      });
+    }
+
+    function onPointerMove(e){
+      pointerX = e.clientX;
+      pointerY = e.clientY;
+      if(!sheenTicking){
+        sheenTicking = true;
+        window.requestAnimationFrame(updateSheen);
+      }
+    }
+
+    window.addEventListener('pointermove', onPointerMove, {passive:true});
+  }
+
+  // Mobile nav toggle
+  var navToggle = document.getElementById('navToggle');
+  var navPanel = document.getElementById('navMobilePanel');
+  if(navToggle && navPanel){
+    navToggle.addEventListener('click', function(){
+      var isOpen = navPanel.classList.toggle('is-open');
+      navToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    });
+    Array.prototype.forEach.call(navPanel.querySelectorAll('a'), function(a){
+      a.addEventListener('click', function(){
+        navPanel.classList.remove('is-open');
+        navToggle.setAttribute('aria-expanded', 'false');
+      });
+    });
+    window.addEventListener('resize', function(){
+      if(window.innerWidth > 640 && navPanel.classList.contains('is-open')){
+        navPanel.classList.remove('is-open');
+        navToggle.setAttribute('aria-expanded', 'false');
+      }
+    });
+  }
+
+  // ============ MINI-GRID HEIGHT MATCH ============
+  // Scales each product's right-hand detail grid to match the rendered
+  // height of its thumbnail image on the left, so 2 (or 4) gallery
+  // renders fit exactly into that same bounding box -- stacked
+  // vertically, side-by-side, or as a 2x2 grid depending on the
+  // .mini-vertical / .mini-horizontal / .mini-quad class set per
+  // product based on its thumbnail's own aspect ratio.
+  (function(){
+    var stackedQuery = window.matchMedia('(max-width:900px)');
+
+    function matchHeights(){
+      if(stackedQuery.matches){
+        Array.prototype.forEach.call(document.querySelectorAll('.gallery-mini-grid'), function(grid){
+          grid.style.height = '';
+        });
+        return;
+      }
+      Array.prototype.forEach.call(document.querySelectorAll('.gallery-split'), function(split){
+        var heroLink = split.querySelector(':scope > a.gallery-item');
+        var miniGrid = split.querySelector('.gallery-mini-grid');
+        if(!heroLink || !miniGrid) return;
+        var h = heroLink.getBoundingClientRect().height;
+        if(h) miniGrid.style.height = h + 'px';
+      });
+    }
+
+    Array.prototype.forEach.call(document.querySelectorAll('.gallery-split'), function(split){
+      var heroImg = split.querySelector(':scope > a.gallery-item > img');
+      if(!heroImg) return;
+      if(heroImg.complete && heroImg.naturalWidth > 0){
+        matchHeights();
+      } else {
+        heroImg.addEventListener('load', matchHeights);
+      }
+    });
+
+    var resizeTimer;
+    window.addEventListener('resize', function(){
+      window.clearTimeout(resizeTimer);
+      resizeTimer = window.setTimeout(matchHeights, 150);
+    });
+    if(stackedQuery.addEventListener){
+      stackedQuery.addEventListener('change', matchHeights);
+    } else if(stackedQuery.addListener){
+      stackedQuery.addListener(matchHeights);
+    }
+    window.setTimeout(matchHeights, 60);
+  })();
+
+  // ============ GALLERY LIGHTBOX ============
+  // Each product section (.gallery-split) is its own self-contained
+  // gallery for prev/next purposes -- cycling never crosses into
+  // another product's images.
+  var galleryGroupEls = Array.prototype.slice.call(document.querySelectorAll('.gallery-split'));
+  var galleryGroups;
+  if(galleryGroupEls.length){
+    galleryGroups = galleryGroupEls.map(function(split){
+      return Array.prototype.slice.call(split.querySelectorAll('.gallery-item'));
+    });
+  } else {
+    var allItems = Array.prototype.slice.call(document.querySelectorAll('.gallery-item'));
+    galleryGroups = allItems.length ? [allItems] : [];
+  }
+
+  var hasGalleryItems = galleryGroups.some(function(g){ return g.length; });
+  if(hasGalleryItems){
+    var lightbox = document.getElementById('lightbox');
+    var lbImg = document.getElementById('lightboxImg');
+    var lbCaption = document.getElementById('lightboxCaption');
+    var lbClose = document.getElementById('lightboxClose');
+    var lbPrev = document.getElementById('lightboxPrev');
+    var lbNext = document.getElementById('lightboxNext');
+    var currentGroup = 0;
+    var currentIndex = 0;
+    var lastFocused = null;
+    var closeTimer = null;
+
+    function openLightbox(groupIndex, index){
+      var group = galleryGroups[groupIndex];
+      if(!group || !group.length) return;
+      currentGroup = groupIndex;
+      currentIndex = (index + group.length) % group.length;
+      var item = group[currentIndex];
+      var title = item.getAttribute('data-title') || '';
+      lbImg.src = item.getAttribute('href');
+      lbImg.alt = title;
+      lbCaption.textContent = title;
+      lastFocused = document.activeElement;
+      if(closeTimer){ window.clearTimeout(closeTimer); closeTimer = null; }
+      lightbox.hidden = false;
+      window.requestAnimationFrame(function(){ lightbox.classList.add('is-open'); });
+      document.body.style.overflow = 'hidden';
+      lbClose.focus();
+    }
+
+    function closeLightbox(){
+      lightbox.classList.remove('is-open');
+      document.body.style.overflow = '';
+      closeTimer = window.setTimeout(function(){ lightbox.hidden = true; }, 250);
+      if(lastFocused && lastFocused.focus) lastFocused.focus();
+    }
+
+    galleryGroups.forEach(function(group, g){
+      group.forEach(function(item, i){
+        item.addEventListener('click', function(e){
+          e.preventDefault();
+          openLightbox(g, i);
+        });
+      });
+    });
+
+    lbClose.addEventListener('click', closeLightbox);
+    lbPrev.addEventListener('click', function(){ openLightbox(currentGroup, currentIndex - 1); });
+    lbNext.addEventListener('click', function(){ openLightbox(currentGroup, currentIndex + 1); });
+    lightbox.addEventListener('click', function(e){
+      if(e.target === lightbox) closeLightbox();
+    });
+    document.addEventListener('keydown', function(e){
+      if(lightbox.hidden) return;
+      if(e.key === 'Escape') closeLightbox();
+      else if(e.key === 'ArrowLeft') openLightbox(currentGroup, currentIndex - 1);
+      else if(e.key === 'ArrowRight') openLightbox(currentGroup, currentIndex + 1);
+    });
+  }
+})();
+</script>
+</body>
+</html>
